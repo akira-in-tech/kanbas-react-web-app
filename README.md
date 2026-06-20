@@ -1,50 +1,67 @@
-<<<<<<< HEAD
-# kanbas-react-web-app
-=======
-# Getting Started with Create React App
+# Kanbas — React Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The React frontend for Kanbas, a Canvas LMS-inspired learning management system built with TypeScript and Redux. Students can view courses, complete assignments, and manage enrollments; instructors can create and manage course content.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Role-based access: Student and Faculty views
+- Course dashboard with modules and assignments
+- Assignment editor with due dates and instructions
+- Enrollment management (enroll/unenroll from courses)
+- User authentication (sign in / sign up / profile)
+- Redux-powered state management
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 18, TypeScript |
+| State | Redux Toolkit |
+| Routing | React Router v6 |
+| HTTP | Axios |
+| Styling | Bootstrap 5 |
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js 18+
+- [kanbas-node-server-app](https://github.com/akira-in-tech/kanbas-node-server-app) running on port 4000
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Running
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+App opens at `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Project Structure
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+src/
+└── Kanbas/
+    ├── Account/        # Auth: sign in, sign up, profile
+    ├── Courses/
+    │   ├── Assignments/
+    │   ├── Modules/
+    │   ├── Home/
+    │   └── People/
+    ├── Dashboard.tsx   # Course list
+    ├── Navigation.tsx
+    └── store.ts        # Redux store
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Related
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- [kanbas-node-server-app](https://github.com/akira-in-tech/kanbas-node-server-app) — Express API backend
 
-## Learn More
+## License
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
->>>>>>> f55f09c (Initialize project using Create React App)
+MIT License — see [LICENSE](LICENSE)
