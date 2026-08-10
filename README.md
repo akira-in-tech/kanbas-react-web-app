@@ -4,11 +4,11 @@ The React frontend for Kanbas, a Canvas LMS-inspired learning management system 
 
 **Live:** [akira-in-tech.github.io/kanbas-react-web-app](https://akira-in-tech.github.io/kanbas-react-web-app/)
 
-> The deployed frontend currently points `REACT_APP_REMOTE_SERVER` at `http://localhost:4000`, since [kanbas-node-server-app](https://github.com/akira-in-tech/kanbas-node-server-app) isn't deployed publicly yet. The page loads, but sign-in, courses, and assignments won't work for anyone except on a machine running that backend locally. Once the backend has a public URL, update `.env.local` (or the build-time env var) and redeploy — see [Deployment](#deployment).
+> Backend is deployed on Render, free tier — the first request after idle can take ~50s to wake up.
 
 ## Features
 
-- Role-based access: Student and Faculty views
+- Role-based access: `STUDENT`/`USER` accounts get a read-only view; only `FACULTY`/`ADMIN` see the add/edit/delete controls for courses, modules, and assignments. The `/Account/Users` admin page redirects non-admins to their profile. This is a UI convenience only — the backend independently enforces the same rules on every write, so the API rejects unauthorized requests even if someone bypasses the frontend.
 - Course dashboard with modules and assignments
 - Assignment editor with due dates and instructions
 - Enrollment management (enroll/unenroll from courses)
@@ -54,7 +54,7 @@ Deployed to GitHub Pages via the [`gh-pages`](https://www.npmjs.com/package/gh-p
 npm run deploy
 ```
 
-This builds the app (`predeploy`) and pushes `build/` to the `gh-pages` branch, which GitHub Pages serves. The build bakes in whatever `REACT_APP_REMOTE_SERVER` is set to at build time (from `.env.local`), so update that to the backend's public URL before deploying once it's hosted somewhere reachable.
+This builds the app (`predeploy`) and pushes `build/` to the `gh-pages` branch, which GitHub Pages serves. The build bakes in whatever `REACT_APP_REMOTE_SERVER` is set to at build time (from `.env.local`), currently the Render backend's URL — update that and redeploy if the backend ever moves.
 
 ## Project Structure
 

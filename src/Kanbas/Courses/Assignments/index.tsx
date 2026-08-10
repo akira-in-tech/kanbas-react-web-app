@@ -14,6 +14,9 @@ export default function Assignments() {
   const { assignments } = useSelector(
     (state: RootState) => state.assignmentsReducer
   );
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const canEdit =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
   const dispatch = useDispatch();
   const [error, setError] = useState("");
 
@@ -75,17 +78,19 @@ export default function Assignments() {
           >
             + Group
           </button>
-          <Link
-            to={`/Kanbas/Courses/${cid}/Assignments/New`}
-            className="btn"
-            style={{
-              backgroundColor: "#d32f2f",
-              color: "#fff",
-              borderRadius: "4px",
-            }}
-          >
-            + Assignment
-          </Link>
+          {canEdit && (
+            <Link
+              to={`/Kanbas/Courses/${cid}/Assignments/New`}
+              className="btn"
+              style={{
+                backgroundColor: "#d32f2f",
+                color: "#fff",
+                borderRadius: "4px",
+              }}
+            >
+              + Assignment
+            </Link>
+          )}
         </div>
       </div>
 
@@ -139,13 +144,14 @@ export default function Assignments() {
                       </div>
                     </div>
                     <LessonControlButtons />
-                    {/* Delete button */}
-                    <button
-                      className="btn btn-danger btn-sm ms-2"
-                      onClick={() => handleDeleteAssignment(assignment._id)}
-                    >
-                      Delete
-                    </button>
+                    {canEdit && (
+                      <button
+                        className="btn btn-danger btn-sm ms-2"
+                        onClick={() => handleDeleteAssignment(assignment._id)}
+                      >
+                        Delete
+                      </button>
+                    )}
                   </li>
                 ))
               ) : (

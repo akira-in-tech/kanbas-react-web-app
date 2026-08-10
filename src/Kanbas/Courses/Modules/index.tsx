@@ -21,6 +21,9 @@ export default function Modules() {
   const { cid } = useParams<{ cid: string }>();
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: RootState) => state.modulesReducer);
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
+  const canEdit =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
   const dispatch = useDispatch();
   const [error, setError] = useState("");
 
@@ -76,11 +79,13 @@ export default function Modules() {
   return (
     <div className="ms-4">
       {error && <div className="alert alert-danger">{error}</div>}
-      <ModulesControls
-        moduleName={moduleName}
-        setModuleName={setModuleName}
-        addModule={createModuleForCourse}
-      />
+      {canEdit && (
+        <ModulesControls
+          moduleName={moduleName}
+          setModuleName={setModuleName}
+          addModule={createModuleForCourse}
+        />
+      )}
       <br />
       <br />
       <br />
@@ -110,11 +115,13 @@ export default function Modules() {
                   defaultValue={module.name}
                 />
               )}
-              <ModuleControlButtons
-                moduleId={module._id}
-                deleteModule={(moduleId) => removeModule(moduleId)}
-                editModule={(moduleId) => dispatch(editModule(moduleId))}
-              />
+              {canEdit && (
+                <ModuleControlButtons
+                  moduleId={module._id}
+                  deleteModule={(moduleId) => removeModule(moduleId)}
+                  editModule={(moduleId) => dispatch(editModule(moduleId))}
+                />
+              )}
             </div>
             {module.lessons && (
               <ul className="wd-lessons list-group rounded-0">
