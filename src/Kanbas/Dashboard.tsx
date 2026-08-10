@@ -69,12 +69,12 @@ export default function Dashboard({
       </h2>{" "}
       <hr />
       <div id="wd-dashboard-courses" className="row">
-        <div className="row row-cols-1 row-cols-md-5 g-4">
+        <div className="d-flex flex-wrap gap-4">
           {courses.map((course) => (
             <div
               key={course._id}
-              className="wd-dashboard-course col"
-              style={{ width: "300px" }}
+              className="wd-dashboard-course"
+              style={{ width: 300, flex: "0 0 300px" }}
             >
               <div className="card rounded-3 overflow-hidden">
                 <Link
