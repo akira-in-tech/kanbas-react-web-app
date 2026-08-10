@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/kanbas-react-web-app/static/css/main.830b5382.css",
-    "main.js": "/kanbas-react-web-app/static/js/main.e1eef3c3.js",
+    "main.js": "/kanbas-react-web-app/static/js/main.4408a0b5.js",
     "index.html": "/kanbas-react-web-app/index.html",
     "main.830b5382.css.map": "/kanbas-react-web-app/static/css/main.830b5382.css.map",
-    "main.e1eef3c3.js.map": "/kanbas-react-web-app/static/js/main.e1eef3c3.js.map"
+    "main.4408a0b5.js.map": "/kanbas-react-web-app/static/js/main.4408a0b5.js.map"
   },
   "entrypoints": [
     "static/css/main.830b5382.css",
-    "static/js/main.e1eef3c3.js"
+    "static/js/main.4408a0b5.js"
   ]
 }
