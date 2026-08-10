@@ -5,8 +5,9 @@ import Signin from "./Signin";
 import Signup from "./Signup";
 import { useSelector } from "react-redux";
 import Users from "./Users";
+import { RootState } from "../store";
 export default function Account() {
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   return (
     <div id="wd-account-screen">
       <table>

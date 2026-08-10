@@ -1,13 +1,9 @@
 import { FaUserCircle } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PeopleDetails from "./Details";
+import { User } from "../../types";
 
-// import * as db from "../../Database"; // Default import for the Database
-
-export default function PeopleTable({ users = [] }: { users?: any[] }) {
-  // const { cid } = useParams(); // Extract course ID from route parameters
-  // const { users, enrollments } = db; // Destructure users and enrollments from Database
-
+export default function PeopleTable({ users = [] }: { users?: User[] }) {
   return (
     <div id="wd-people-table">
       <PeopleDetails />
@@ -24,36 +20,29 @@ export default function PeopleTable({ users = [] }: { users?: any[] }) {
           </tr>
         </thead>
         <tbody>
-          {users
-            // .filter((usr) =>
-            //   enrollments.some(
-            //     (enrollment) =>
-            //       enrollment.user === usr._id && enrollment.course === cid
-            //   )
-            // )
-            .map((user: any) => (
-              <tr key={user._id}>
-                <td className="wd-full-name text-nowrap">
-                  <Link
-                    to={`/Kanbas/Account/Users/${user._id}`}
-                    className="text-decoration-none"
-                  >
-                    <FaUserCircle className="me-2 fs-1 text-secondary" />
-                    <span className="wd-first-name text-danger">
-                      {user.firstName}{" "}
-                    </span>
-                    <span className="wd-last-name text-danger">
-                      {user.lastName}
-                    </span>
-                  </Link>
-                </td>
-                <td className="wd-login-id">{user.loginId}</td>
-                <td className="wd-section">{user.section}</td>
-                <td className="wd-role">{user.role}</td>
-                <td className="wd-last-activity">{user.lastActivity}</td>
-                <td className="wd-total-activity">{user.totalActivity}</td>
-              </tr>
-            ))}
+          {users.map((user) => (
+            <tr key={user._id}>
+              <td className="wd-full-name text-nowrap">
+                <Link
+                  to={`/Kanbas/Account/Users/${user._id}`}
+                  className="text-decoration-none"
+                >
+                  <FaUserCircle className="me-2 fs-1 text-secondary" />
+                  <span className="wd-first-name text-danger">
+                    {user.firstName}{" "}
+                  </span>
+                  <span className="wd-last-name text-danger">
+                    {user.lastName}
+                  </span>
+                </Link>
+              </td>
+              <td className="wd-login-id">{user.loginId}</td>
+              <td className="wd-section">{user.section}</td>
+              <td className="wd-role">{user.role}</td>
+              <td className="wd-last-activity">{user.lastActivity}</td>
+              <td className="wd-total-activity">{user.totalActivity}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

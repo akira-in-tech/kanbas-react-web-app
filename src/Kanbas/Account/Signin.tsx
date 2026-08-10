@@ -2,24 +2,30 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";
-import * as db from "../Database";
 import * as client from "./client";
+import { User } from "../types";
 
 export default function Signin() {
-  const [credentials, setCredentials] = useState<any>({});
+  const [credentials, setCredentials] = useState<Partial<User>>({});
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signin = async () => {
-    const user = await client.signin(credentials);
-    if (!user) return;
-    dispatch(setCurrentUser(user));
-    navigate("/Kanbas/Dashboard");
+    try {
+      const user = await client.signin(credentials);
+      dispatch(setCurrentUser(user));
+      navigate("/Kanbas/Dashboard");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid username or password.");
+    }
   };
   return (
     <div id="wd-signin-screen">
       <h1>Sign in</h1>
+      {error && <div className="alert alert-danger">{error}</div>}
       <input
-        defaultValue={credentials.username}
+        value={credentials.username || ""}
         onChange={(e) =>
           setCredentials({ ...credentials, username: e.target.value })
         }
@@ -28,7 +34,7 @@ export default function Signin() {
         id="wd-username"
       />
       <input
-        defaultValue={credentials.password}
+        value={credentials.password || ""}
         onChange={(e) =>
           setCredentials({ ...credentials, password: e.target.value })
         }

@@ -1,39 +1,53 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
 import * as client from "./client";
+import { RootState } from "../store";
+import { User } from "../types";
 
 export default function Profile() {
-  const [profile, setProfile] = useState<any>({});
+  const [profile, setProfile] = useState<Partial<User>>({});
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const { currentUser } = useSelector((state: RootState) => state.accountReducer);
   const fetchProfile = () => {
     if (!currentUser) return navigate("/Kanbas/Account/Signin");
     setProfile(currentUser);
   };
   const updateProfile = async () => {
-    const updatedProfile = await client.updateUser(profile);
-    dispatch(setCurrentUser(updatedProfile));
+    try {
+      const updatedProfile = await client.updateUser(profile as User);
+      dispatch(setCurrentUser(updatedProfile));
+    } catch (err) {
+      console.error(err);
+      setError("Unable to update profile. Please try again.");
+    }
   };
 
   const signout = async () => {
-    await client.signout();
-    dispatch(setCurrentUser(null));
-    navigate("/Kanbas/Account/Signin");
+    try {
+      await client.signout();
+      dispatch(setCurrentUser(null));
+      navigate("/Kanbas/Account/Signin");
+    } catch (err) {
+      console.error(err);
+      setError("Unable to sign out. Please try again.");
+    }
   };
   useEffect(() => {
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div id="wd-profile-screen" className="ms-5 mt-4">
       <h1>Profile</h1>
+      {error && <div className="alert alert-danger">{error}</div>}
       {profile && (
         <div>
           <input
-            defaultValue={profile.username}
+            value={profile.username || ""}
             id="wd-username"
             className="form-control mb-2"
             onChange={(e) =>
@@ -41,7 +55,7 @@ export default function Profile() {
             }
           />
           <input
-            defaultValue={profile.password}
+            value={profile.password || ""}
             id="wd-password"
             className="form-control mb-2"
             onChange={(e) =>
@@ -49,7 +63,7 @@ export default function Profile() {
             }
           />
           <input
-            defaultValue={profile.firstName}
+            value={profile.firstName || ""}
             id="wd-firstname"
             className="form-control mb-2"
             onChange={(e) =>
@@ -57,7 +71,7 @@ export default function Profile() {
             }
           />
           <input
-            defaultValue={profile.lastName}
+            value={profile.lastName || ""}
             id="wd-lastname"
             className="form-control mb-2"
             onChange={(e) =>
@@ -65,20 +79,23 @@ export default function Profile() {
             }
           />
           <input
-            defaultValue={profile.dob}
+            value={profile.dob || ""}
             id="wd-dob"
             className="form-control mb-2"
             onChange={(e) => setProfile({ ...profile, dob: e.target.value })}
             type="date"
           />
           <input
-            defaultValue={profile.email}
+            value={profile.email || ""}
             id="wd-email"
             className="form-control mb-2"
             onChange={(e) => setProfile({ ...profile, email: e.target.value })}
           />
           <select
-            onChange={(e) => setProfile({ ...profile, role: e.target.value })}
+            value={profile.role || "USER"}
+            onChange={(e) =>
+              setProfile({ ...profile, role: e.target.value as User["role"] })
+            }
             className="form-control mb-2"
             id="wd-role"
           >

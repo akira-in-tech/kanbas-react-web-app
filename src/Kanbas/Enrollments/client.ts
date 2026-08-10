@@ -1,10 +1,15 @@
-// src/Kanbas/Enrollments/client.ts
 import axios from "axios";
+import { Enrollment } from "../types";
 
-const API_BASE = "http://localhost:4000/api";
+const axiosWithCredentials = axios.create({ withCredentials: true });
+const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
+const API_BASE = `${REMOTE_SERVER}/api`;
 
-export const enrollUserInCourse = async (userId: string, courseId: string) => {
-  const response = await axios.post(`${API_BASE}/enrollments`, {
+export const enrollUserInCourse = async (
+  userId: string,
+  courseId: string
+): Promise<Enrollment> => {
+  const response = await axiosWithCredentials.post(`${API_BASE}/enrollments`, {
     userId,
     courseId,
   });
@@ -14,17 +19,25 @@ export const enrollUserInCourse = async (userId: string, courseId: string) => {
 export const unenrollUserFromCourse = async (
   userId: string,
   courseId: string
-) => {
-  await axios.delete(`${API_BASE}/enrollments`, { data: { userId, courseId } });
+): Promise<void> => {
+  await axiosWithCredentials.delete(`${API_BASE}/enrollments`, {
+    data: { userId, courseId },
+  });
 };
 
-export const findEnrollmentsForUser = async (userId: string) => {
-  const response = await axios.get(`${API_BASE}/users/${userId}/enrollments`);
+export const findEnrollmentsForUser = async (
+  userId: string
+): Promise<Enrollment[]> => {
+  const response = await axiosWithCredentials.get(
+    `${API_BASE}/users/${userId}/enrollments`
+  );
   return response.data;
 };
 
-export const findEnrollmentsForCourse = async (courseId: string) => {
-  const response = await axios.get(
+export const findEnrollmentsForCourse = async (
+  courseId: string
+): Promise<Enrollment[]> => {
+  const response = await axiosWithCredentials.get(
     `${API_BASE}/courses/${courseId}/enrollments`
   );
   return response.data;

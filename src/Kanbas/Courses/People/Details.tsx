@@ -1,39 +1,60 @@
 import { useEffect, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { useParams, useNavigate } from "react-router";
-import { Link } from "react-router-dom";
 import * as client from "../../Account/client";
 import { FaPencil } from "react-icons/fa6";
 import { FaCheck, FaUserCircle } from "react-icons/fa";
+import { User } from "../../types";
 
 export default function PeopleDetails() {
   const { uid } = useParams();
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<Partial<User>>({});
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [editing, setEditing] = useState(false);
+
   const saveUser = async () => {
     const [firstName, lastName] = name.split(" ");
     const updatedUser = { ...user, firstName, lastName };
-    await client.updateUser(updatedUser);
-    setUser(updatedUser);
-    setEditing(false);
-    navigate(-1);
+    try {
+      await client.updateUser(updatedUser as User);
+      setUser(updatedUser);
+      setEditing(false);
+      navigate(-1);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to save this user. Please try again.");
+    }
   };
 
   const fetchUser = async () => {
     if (!uid) return;
-    const user = await client.findUserById(uid);
-    setUser(user);
+    try {
+      const user = await client.findUserById(uid);
+      setUser(user);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load this user. Please try again.");
+    }
   };
 
   const deleteUser = async (uid: string) => {
-    await client.deleteUser(uid);
-    navigate(-1);
+    if (!window.confirm("Are you sure you want to delete this user?")) {
+      return;
+    }
+    try {
+      await client.deleteUser(uid);
+      navigate(-1);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete this user. Please try again.");
+    }
   };
 
   useEffect(() => {
     if (uid) fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
   if (!uid) return null;
   return (
@@ -49,6 +70,7 @@ export default function PeopleDetails() {
         <FaUserCircle className="text-secondary me-2 fs-1" />{" "}
       </div>
       <hr />
+      {error && <div className="alert alert-danger">{error}</div>}
       <div className="text-danger fs-4 wd-name">
         {!editing && (
           <FaPencil

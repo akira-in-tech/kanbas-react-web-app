@@ -1,44 +1,56 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { BsGripVertical, BsSearch } from "react-icons/bs";
 import { FaClipboardList, FaCaretDown } from "react-icons/fa";
 import AssignmentControlButtons from "./AssignmentsControlButton";
 import LessonControlButtons from "./LessonControlButtons";
-import * as db from "../../Database"; // Import your database
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { addAssignment } from "./reducer";
+import { useSelector, useDispatch } from "react-redux";
 import { setAssignments } from "./reducer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as assignmentsClient from "./client";
+import { RootState } from "../../store";
 
 export default function Assignments() {
   const { cid } = useParams(); // Extract course ID from URL
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer
+  );
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   // Fetch assignments from database when cid changes
   useEffect(() => {
     const loadAssignments = async () => {
-      if (cid) {
+      if (!cid) return;
+      try {
         const data = await assignmentsClient.findAssignmentsForCourse(cid);
-        // Dispatch the assignments into the store
         dispatch(setAssignments(data));
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load assignments. Please try again.");
       }
     };
     loadAssignments();
   }, [cid, dispatch]);
+
   // Handle delete assignment
   const handleDeleteAssignment = async (assignmentId: string) => {
-    await assignmentsClient.deleteAssignment(assignmentId);
-    // Update the local store to remove the deleted assignment
-    dispatch(
-      setAssignments(assignments.filter((a: any) => a._id !== assignmentId))
-    );
+    if (!window.confirm("Are you sure you want to delete this assignment?")) {
+      return;
+    }
+    try {
+      await assignmentsClient.deleteAssignment(assignmentId);
+      dispatch(
+        setAssignments(assignments.filter((a) => a._id !== assignmentId))
+      );
+    } catch (err) {
+      console.error(err);
+      setError("Unable to delete assignment. Please try again.");
+    }
   };
 
   return (
     <div id="wd-assignments" className="p-4">
+      {error && <div className="alert alert-danger">{error}</div>}
       {/* Search and Add Buttons */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div className="input-group w-75 me-3">
@@ -91,7 +103,7 @@ export default function Assignments() {
             </div>
             <ul className="wd-lessons list-group rounded-0">
               {assignments.length > 0 ? (
-                assignments.map((assignment: any) => (
+                assignments.map((assignment) => (
                   <li
                     key={assignment._id}
                     className="wd-lesson list-group-item p-3 d-flex justify-content-between align-items-start"
@@ -113,11 +125,13 @@ export default function Assignments() {
                         </span>
                         <span className="ms-3 text-black">
                           | <strong>Not available until</strong>{" "}
-                          {new Date(assignment.availableFrom).toLocaleString()}
+                          {assignment.availableFrom &&
+                            new Date(assignment.availableFrom).toLocaleString()}
                         </span>
                         <span className="ms-3 text-black">
                           | <strong>Due</strong>{" "}
-                          {new Date(assignment.dueDate).toLocaleString()}
+                          {assignment.dueDate &&
+                            new Date(assignment.dueDate).toLocaleString()}
                         </span>
                         <span className="ms-3 text-black">
                           | {assignment.points} pts
