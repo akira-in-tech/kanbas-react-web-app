@@ -93,7 +93,7 @@ export default function Dashboard({
                   className="wd-dashboard-course-link text-decoration-none text-dark"
                 >
                   <img
-                    src={`${process.env.PUBLIC_URL}${course.image || "/images/react.png"}`}
+                    src={`${import.meta.env.BASE_URL}${(course.image || "images/react.png").replace(/^\//, "")}`}
                     alt={course.name}
                     width="100%"
                     height={160}

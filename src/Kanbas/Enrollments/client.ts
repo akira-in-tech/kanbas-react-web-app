@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Enrollment } from "../types";
+import { REMOTE_SERVER } from "../../config";
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
-const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const API_BASE = `${REMOTE_SERVER}/api`;
 
 export const enrollUserInCourse = async (

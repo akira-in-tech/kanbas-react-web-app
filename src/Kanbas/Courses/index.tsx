@@ -1,7 +1,7 @@
 import CoursesNavigation from "./Navigation";
 import Modules from "./Modules";
 import Home from "./Home";
-import { Route, Routes, useParams, useLocation } from "react-router";
+import { Route, Routes, useParams, useLocation } from "react-router-dom";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
 import { FaAlignJustify } from "react-icons/fa";

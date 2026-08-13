@@ -10,8 +10,8 @@ export default function Session({ children }: { children: ReactNode }) {
     try {
       const currentUser = await client.profile();
       dispatch(setCurrentUser(currentUser));
-    } catch (err) {
-      console.error(err);
+    } catch {
+      dispatch(setCurrentUser(null));
     }
     setPending(false);
   };
@@ -22,5 +22,9 @@ export default function Session({ children }: { children: ReactNode }) {
   if (!pending) {
     return <>{children}</>;
   }
-  return null;
+  return (
+    <div className="p-4" role="status" aria-live="polite">
+      Loading your workspace…
+    </div>
+  );
 }

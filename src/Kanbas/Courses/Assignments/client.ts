@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Assignment } from "../../types";
+import { REMOTE_SERVER } from "../../../config";
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
-const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const COURSES_API = `${REMOTE_SERVER}/api/courses`;
 const ASSIGNMENTS_API = `${REMOTE_SERVER}/api/assignments`;
 

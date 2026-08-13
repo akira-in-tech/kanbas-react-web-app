@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Course, User } from "../types";
+import { REMOTE_SERVER } from "../../config";
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
-export const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 export const USERS_API = `${REMOTE_SERVER}/api/users`;
 
 export const signin = async (credentials: Partial<User>): Promise<User> => {
